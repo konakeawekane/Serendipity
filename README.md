@@ -1,56 +1,63 @@
-# Welcome to your Expo app 👋
+# Playful Generators
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A local-first Expo app that turns user-owned idea libraries into randomized activities. It includes Spin the Wheel, What/Where/When, and Caveat Generator without accounts, cloud services, or an AI API.
 
-## Get started
+## Requirements
 
-1. Install dependencies
+- Node.js 22.13 or newer (developed with Node 24.17)
+- npm 11 or newer
+- The current App Store version of Expo Go or a compatible Android/iOS simulator
+- For Expo Go on a physical iPhone, the same Expo account signed in on the phone and in Expo CLI
 
-   ```bash
-   npm install
-   ```
+## Setup and run
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```sh
+npm install
+npx expo login
+npm start
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+Then sign in to that account in Expo Go, scan the QR code, or use the terminal shortcuts. On Windows, Android and web are available locally; native iOS builds require macOS, though Expo Go can open the project on an iOS device.
 
-### Other setup steps
+Useful commands:
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+```sh
+npm run android
+npm run ios
+npm run web
+npm run typecheck
+npm run lint
+npm test
+```
 
-## Learn more
+## Architecture
 
-To learn more about developing your project with Expo, look at the following resources:
+- Routes and screens: `src/app/`
+- Reusable UI and semantic theme: `src/components/`, `src/theme/`
+- Pure generator logic: `src/features/generators.ts`
+- Domain types and validation: `src/types/`, `src/domain/`
+- SQLite migrations/repository: `src/db/`
+- Import/export parsing and platform file actions: `src/features/import-export/`
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+`expo-sqlite` stores libraries, entries, and settings in `playful-generators.db`. Foreign keys and WAL mode are enabled. Screens call the repository through `AppDataProvider`; they do not run SQL.
 
-## Join the community
+## Data format
 
-Join our community of developers creating universal apps.
+Imports and exports contain exactly one version-1 library. Imports are size-limited, parsed, validated, previewed, and only saved after confirmation. New IDs are generated transactionally to prevent collisions. See [docs/library-format.md](docs/library-format.md).
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Implementation decisions
+
+- The project targets Expo SDK 57 because the App Store version of Expo Go does not yet support SDK 58.
+- Web output uses Expo Router's client-only `single` mode because this local-first app has no server routes and its SQLite provider is browser-only.
+- Empty libraries are allowed; no sample content is silently installed.
+- Library metadata uses explicit Save; entry changes save per action.
+- Haptics are omitted because they are optional and were not otherwise required.
+- Import defaults: 1 MB maximum and 2,000 entries; text limits follow the implementation plan.
+- SQLite is also configured for Expo web’s WASM requirement.
+- Repository and pure-logic tests use Jest 30; it is excluded from Expo CLI's dependency-version validation.
+
+## Known limitations
+
+- The linked Figma file was not accessible from the implementation environment, so styling follows the written paint-splatter brief.
+- Native file pick/share flows and iOS/Android small-screen behavior still require hands-on device acceptance testing.
+- Web exports use a browser download; native platforms use the share sheet.
