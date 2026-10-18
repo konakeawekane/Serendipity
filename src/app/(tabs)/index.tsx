@@ -3,8 +3,8 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { PaintSplatter } from '@/components/PaintSplatter';
 import { AppHeader, ScreenContainer } from '@/components/ui';
-import { radii, spacing, typography } from '@/theme/tokens';
 import { usePlayfulTheme } from '@/theme/ThemeProvider';
+import { radii, spacing, typography } from '@/theme/tokens';
 
 const generators = [
   { title: 'Spin the Wheel', description: 'Let one of your own ideas win.', route: '/spin' as const, symbol: '↻', accent: 'primary' as const },
