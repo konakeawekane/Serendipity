@@ -1,6 +1,6 @@
 # Playful Generators
 
-Playful Generators is a local-first mobile app that turns user-created idea libraries into randomized activities. It includes Spin the Wheel, What/Where/When, and Caveat Generator. Libraries, entries, theme preferences, and repeat settings are stored locally with SQLite; no account, backend, or AI service is required. Libraries can also be imported from and exported to versioned JSON files.
+Playful Generators is a mobile app that turns users ideas into randomized activities. It includes Spin the Wheel, What/Where/When, and Caveat Generator. App data is all stored locally with SQLite. Libraries can also be imported and exported in JSON.
 
 ## Instructions for Build and Use
 
@@ -34,7 +34,7 @@ To recreate the development environment, you need the following software and/or 
 
 ## Useful Websites to Learn More
 
-I found these websites useful in developing this software:
+I found these websites useful in developing this app:
 
 * [Expo SDK 57 documentation](https://docs.expo.dev/versions/v57.0.0/)
 * [Expo Router introduction](https://docs.expo.dev/router/introduction/)
@@ -46,6 +46,6 @@ I found these websites useful in developing this software:
 
 The following items I plan to fix, improve, and/or add to this project in the future:
 
-* [ ] Complete hands-on acceptance testing across physical iOS and Android devices, small screens, and software keyboards.
-* [ ] Add automated component and end-to-end tests for navigation, forms, imports, exports, and accessibility behavior.
-* [ ] Configure EAS development and production build profiles when the app is ready for external distribution.
+* [ ] Improved user interface and experiance
+* [ ] Additional generators
+* [ ] MCP connection for idea generation
